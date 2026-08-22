@@ -19,7 +19,7 @@ jobs:
 
       - name: 🚀 Upgrade Helm Release
         run: |
-          helm upgrade portfolio-release .\portfolio-chart\ --namespace portfolio-app --set app.message="Successfully deployed AUTOMATICALLY via GitHub Actions CI/CD Pipeline!" --kubeconfig ./kubeconfig
+          helm upgrade --install portfolio-release .\portfolio-chart\ --namespace portfolio-app --create-namespace --set app.message="Successfully deployed AUTOMATICALLY via GitHub Actions CI/CD Pipeline!" --kubeconfig ./kubeconfig
 
       - name: 🔄 Restart Backend Workload
         run: |
