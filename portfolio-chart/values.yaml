@@ -1,0 +1,6 @@
+app:
+  message: "Hello! This application is now deployed using Helm!"
+
+database:
+  user: "admin"
+  password: "SuperSecretHelmPassword123"

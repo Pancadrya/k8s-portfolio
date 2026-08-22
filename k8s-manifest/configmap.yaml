@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: portfolio-app
+data:
+  POSTGRES_DB: "portfoliodb"
+  BACKEND_MESSAGE: "Halo dari Backend API Kubernetes! (Dikonfigurasi via ConfigMap)"

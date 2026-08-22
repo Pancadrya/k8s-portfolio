@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  namespace: k8s-lab
+data:
+  APP_ENV: "lab"
+  APP_MESSAGE: "Kubernetes is running this application"
