@@ -1,5 +1,5 @@
 app:
-  message: "Hello! This application is now deployed using Helm!"
+  message: "Hello! This is v3 release that automatically deployed by Github Actions!"
 
 database:
   user: "admin"
