@@ -1,4 +1,4 @@
-name: Local K8s Continuous Deployment
+name: DevSecOps CI/CD Pipeline
 
 on:
   push:
@@ -6,11 +6,34 @@ on:
       - main
 
 jobs:
-  deploy-to-kind:
-    name: Helm Upgrade on Local Cluster
+  ci-security:
+    name: 🛡️ CI & Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🛎️ Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Helm
+        uses: azure/setup-helm@v3
+
+      - name: 🔍 Helm Syntax Linting
+        run: helm lint ./portfolio-chart/
+
+      - name: 🕵️ Trivy Security Scan (IaC)
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: "config"
+          hide-progress: false
+          format: "table"
+          scan-ref: "./portfolio-chart"
+          exit-code: "0"
+
+  cd-deploy:
+    name: 🚀 Continuous Deployment
+    needs: ci-security # Job ini hanya jalan jika CI & Security Scan lolos!
     runs-on: [self-hosted, local-k8s]
     steps:
-      - name: 📥 Checkout Source Code
+      - name: 🛎️ Checkout Repository
         uses: actions/checkout@v4
 
       - name: ⚙️ Setup Kubeconfig
@@ -19,7 +42,7 @@ jobs:
 
       - name: 🚀 Upgrade Helm Release
         run: |
-          helm upgrade --install portfolio-release .\portfolio-chart\ --namespace portfolio-app --create-namespace --reset-values --kubeconfig ./kubeconfig
+          helm upgrade --install portfolio-release ./portfolio-chart/ --namespace portfolio-app --create-namespace --reset-values --kubeconfig ./kubeconfig
 
       - name: 🔄 Restart Backend Workload
         run: |
